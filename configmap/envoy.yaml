@@ -1,0 +1,9 @@
+# /etc/envoy/envoy.yaml
+node:
+  cluster: test-cluster
+  id: test-id
+dynamic_resources:
+  cds_config:
+    path: /etc/envoy/cds.yaml
+  lds_config:
+    path: /etc/envoy/lds.yaml
