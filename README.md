@@ -1,4 +1,4 @@
-# hello-envoy
+# hello-envoy [![envoy](https://github.com/int128/hello-envoy/actions/workflows/envoy.yaml/badge.svg)](https://github.com/int128/hello-envoy/actions/workflows/envoy.yaml)
 
 This is an example of Envoy TCP Proxy with the dynamic configuration.
 It is based on https://gist.github.com/int128/5b02bd1f9b7882aa6b48727b838e658e.
