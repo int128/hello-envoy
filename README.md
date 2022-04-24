@@ -1,9 +1,13 @@
 # hello-envoy
 
-This is an example of Envoy TCP Proxy from localhost:10000 to httpbin.org:80.
-See also https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/listeners/tcp_proxy.
-
+This is an example of Envoy TCP Proxy with the dynamic configuration.
 It is based on https://gist.github.com/int128/5b02bd1f9b7882aa6b48727b838e658e.
+
+## References
+
+- https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/listeners/tcp_proxy
+- https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy
+- https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/configuration-dynamic-filesystem
 
 ## Static configuration
 
@@ -102,4 +106,82 @@ Make sure Google returns a response.
 % curl -v http://localhost:10000/get
 ...
   <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+```
+
+## Dynamic configuration (Kubernetes)
+
+### Set up
+
+Create a cluster.
+
+```console
+% kind create cluster
+ ✓ Ensuring node image (kindest/node:v1.23.4) 🖼
+ ✓ Preparing nodes 📦
+...
+
+% kubectl version
+Client Version: version.Info{Major:"1", Minor:"23", GitVersion:"v1.23.6", GitCommit:"ad3338546da947756e8a88aa6822e9c11e7eac22", GitTreeState:"clean", BuildDate:"2022-04-14T08:41:58Z", GoVersion:"go1.18.1", Compiler:"gc", Platform:"darwin/amd64"}
+Server Version: version.Info{Major:"1", Minor:"23", GitVersion:"v1.23.4", GitCommit:"e6c093d87ea4cbb530a7b2ae91e54c0842d8308a", GitTreeState:"clean", BuildDate:"2022-03-06T21:32:53Z", GoVersion:"go1.17.7", Compiler:"gc", Platform:"linux/amd64"}
+```
+
+Deploy the Envoy.
+
+```console
+% kubectl create cm envoy --from-file=envoy_dynamic
+configmap/envoy created
+
+% kubectl apply -f envoy_deployment.yaml
+deployment.apps/envoy created
+
+% kubectl logs -l app=envoy
+...
+[2022-04-24 09:06:38.547][1][info][config] [source/server/listener_manager_impl.cc:789] all dependencies initialized. starting workers
+```
+
+Make sure httpbin returns a response.
+
+```console
+% kubectl port-forward "$(kubectl get pods -l app=envoy -oname)" 10000:10000
+Forwarding from 127.0.0.1:10000 -> 10000
+Forwarding from [::1]:10000 -> 10000
+
+% curl -v http://localhost:10000/get
+...
+  "url": "http://localhost/get"
+```
+
+### Change the config without restart
+
+Change the xDS config in the ConfigMap.
+
+```console
+% kubectl edit cm envoy
+configmap/envoy edited
+```
+
+Check the log of Envoy container.
+
+```console
+% kubectl logs -l app=envoy
+...
+[2022-04-24 09:16:19.350][1][info][upstream] [source/common/upstream/cds_api_helper.cc:30] cds: add 1 cluster(s), remove 0 cluster(s)
+[2022-04-24 09:16:19.351][1][info][upstream] [source/common/upstream/cds_api_helper.cc:67] cds: added/updated 1 cluster(s), skipped 0 unmodified cluster(s)
+```
+
+Make sure Google returns a response.
+
+```console
+% curl -v http://localhost:10000/get
+...
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+```
+
+### Clean up
+
+Delete the cluster.
+
+```console
+% kind delete cluster
+Deleting cluster "kind" ...
 ```

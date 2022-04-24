@@ -8,7 +8,15 @@ dynamic_resources:
     resource_api_version: V3
     path_config_source:
       path: /etc/envoy/cds.yaml
+      # only if using a ConfigMap
+      # https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/config_source.proto#envoy-v3-api-msg-config-core-v3-pathconfigsource
+      watched_directory:
+        path: /etc/envoy
   lds_config:
     resource_api_version: V3
     path_config_source:
       path: /etc/envoy/lds.yaml
+      # only if using a ConfigMap
+      # https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/core/v3/config_source.proto#envoy-v3-api-msg-config-core-v3-pathconfigsource
+      watched_directory:
+        path: /etc/envoy
