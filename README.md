@@ -53,3 +53,53 @@ To connect to the remote host via the proxy:
 }
 * Connection #0 to host localhost left intact
 ```
+
+## Dynamic configuration
+
+### Set up Envoy
+
+To run a proxy:
+
+```console
+% docker run --rm envoyproxy/envoy:v1.22-latest --version
+
+envoy  version: dcd329a2e95b54f754b17aceca3f72724294b502/1.22.0/Clean/RELEASE/BoringSSL
+
+% docker run --rm -p 10000:10000 -v $PWD/envoy_dynamic:/etc/envoy envoyproxy/envoy:v1.22-latest -c /etc/envoy/envoy.yaml
+...
+[2022-04-24 07:39:54.948][1][info][config] [source/server/listener_manager_impl.cc:789] all dependencies initialized. starting workers
+```
+
+Make sure httpbin returns a response.
+
+```console
+% curl -v http://localhost:10000/get
+...
+  "url": "http://localhost/get"
+```
+
+### Change the config without restart
+
+Change the xDS config in the container.
+
+```console
+% docker ps -a
+dc1323f80ea2
+
+% docker exec dc1323f80ea2 sed -i -e 's/httpbin.org/google.com/' /etc/envoy/cds.yaml
+```
+
+Check the log of Envoy container.
+
+```console
+[2022-04-24 07:58:50.477][1][info][upstream] [source/common/upstream/cds_api_helper.cc:30] cds: add 1 cluster(s), remove 0 cluster(s)
+[2022-04-24 07:58:50.479][1][info][upstream] [source/common/upstream/cds_api_helper.cc:67] cds: added/updated 1 cluster(s), skipped 0 unmodified cluster(s)
+```
+
+Make sure Google returns a response.
+
+```console
+% curl -v http://localhost:10000/get
+...
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+```

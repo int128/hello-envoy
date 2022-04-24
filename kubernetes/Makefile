@@ -1,5 +1,5 @@
 deploy:
-	kubectl create cm envoy --from-file=configmap
+	kubectl create cm envoy --from-file=../envoy_dynamic
 	kubectl apply -f deployment.yaml
 
 clean:
