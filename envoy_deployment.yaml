@@ -15,7 +15,7 @@ spec:
       containers:
         - args:
             - -c
-            - /etc/envoy/envoy.yaml
+            - /etc/envoy/bootstrap.yaml
           image: envoyproxy/envoy:v1.22-latest
           name: envoy
           resources:

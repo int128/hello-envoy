@@ -1,4 +1,4 @@
-# /etc/envoy/envoy.yaml
+# bootstrap.yaml
 node:
   cluster: test-cluster
   id: test-id

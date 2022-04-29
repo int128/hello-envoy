@@ -69,7 +69,7 @@ To run a proxy:
 
 envoy  version: dcd329a2e95b54f754b17aceca3f72724294b502/1.22.0/Clean/RELEASE/BoringSSL
 
-% docker run --rm -p 10000:10000 -v $PWD/envoy_dynamic:/etc/envoy envoyproxy/envoy:v1.22-latest -c /etc/envoy/envoy.yaml
+% docker run --rm -p 10000:10000 -v $PWD/envoy_dynamic:/etc/envoy envoyproxy/envoy:v1.22-latest -c /etc/envoy/bootstrap.yaml
 ...
 [2022-04-24 07:39:54.948][1][info][config] [source/server/listener_manager_impl.cc:789] all dependencies initialized. starting workers
 ```
