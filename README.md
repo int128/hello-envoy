@@ -3,11 +3,11 @@
 This is an example of Envoy TCP Proxy with the dynamic configuration.
 It is based on https://gist.github.com/int128/5b02bd1f9b7882aa6b48727b838e658e.
 
-## References
+## :book: Table of Contents
 
-- https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/listeners/tcp_proxy
-- https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy
-- https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/configuration-dynamic-filesystem
+- Static configuration (Docker)
+- Dynamic configuration (Docker)
+- Dynamic configuration (Kubernetes)
 
 ## Static configuration
 
@@ -185,3 +185,11 @@ Delete the cluster.
 % kind delete cluster
 Deleting cluster "kind" ...
 ```
+
+## :link: References
+
+- https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/listeners/tcp_proxy
+- https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/run-envoy
+- https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/configuration-dynamic-filesystem
+
+If you are looking for a HTTP(S) proxy, see https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/http/http instead.
