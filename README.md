@@ -58,6 +58,12 @@ To connect to the remote host via the proxy:
 * Connection #0 to host localhost left intact
 ```
 
+Check the [access log](https://www.envoyproxy.io/docs/envoy/latest/intro/arch_overview/observability/access_logging) in stdout.
+
+```console
+[2022-05-08T09:37:42.496Z] "- - -" 0 - 82 480 529 - "-" "-" "-" "-" "72.44.59.17:80"
+```
+
 ## Dynamic configuration
 
 ### Set up Envoy
