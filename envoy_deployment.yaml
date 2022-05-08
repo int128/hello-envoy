@@ -24,6 +24,11 @@ spec:
             requests:
               cpu: 10m
               memory: 256Mi
+          readinessProbe:
+            periodSeconds: 10
+            httpGet:
+              path: /ready
+              port: 19901
           volumeMounts:
             - mountPath: /etc/envoy
               name: envoy
