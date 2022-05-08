@@ -42,6 +42,6 @@ resources:
                     domains: ["*"]
                     routes:
                       - match:
-                          prefix: "/ready"
+                          path: "/ready"
                         route:
                           cluster: admin_cluster
