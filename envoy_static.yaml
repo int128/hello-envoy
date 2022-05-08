@@ -1,3 +1,4 @@
+# https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/configuration-static
 static_resources:
   listeners:
     - name: listener_0
@@ -12,6 +13,11 @@ static_resources:
                 "@type": type.googleapis.com/envoy.extensions.filters.network.tcp_proxy.v3.TcpProxy
                 stat_prefix: destination
                 cluster: cluster_0
+                access_log:
+                  - name: envoy.access_loggers.stdout
+                    typed_config:
+                      "@type": type.googleapis.com/envoy.extensions.access_loggers.stream.v3.StdoutAccessLog
+
   clusters:
     - name: cluster_0
       connect_timeout: 30s
