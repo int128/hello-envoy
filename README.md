@@ -75,7 +75,7 @@ To run a proxy:
 
 envoy  version: dcd329a2e95b54f754b17aceca3f72724294b502/1.22.0/Clean/RELEASE/BoringSSL
 
-% docker run --rm -p 10000:10000 -v $PWD/envoy_dynamic:/etc/envoy envoyproxy/envoy:v1.22-latest -c /etc/envoy/bootstrap.yaml
+% docker run --rm -p 10000:10000 -p 19901:19901 -v $PWD/envoy_dynamic:/etc/envoy envoyproxy/envoy:v1.22-latest -c /etc/envoy/bootstrap.yaml
 ...
 [2022-04-24 07:39:54.948][1][info][config] [source/server/listener_manager_impl.cc:789] all dependencies initialized. starting workers
 ```
@@ -86,6 +86,23 @@ Make sure httpbin returns a response.
 % curl -v http://localhost:10000/get
 ...
   "url": "http://localhost/get"
+```
+
+Make sure the ready endpoint returns `LIVE`.
+
+```console
+% curl -v http://localhost:19901/ready
+...
+< HTTP/1.1 200 OK
+< content-type: text/plain; charset=UTF-8
+< cache-control: no-cache, max-age=0
+< x-content-type-options: nosniff
+< date: Sun, 08 May 2022 11:55:47 GMT
+< server: envoy
+< x-envoy-upstream-service-time: 2
+< transfer-encoding: chunked
+<
+LIVE
 ```
 
 ### Change the config without restart
@@ -139,6 +156,10 @@ configmap/envoy created
 
 % kubectl apply -f envoy_deployment.yaml
 deployment.apps/envoy created
+
+% kubectl get deployments envoy
+NAME    READY   UP-TO-DATE   AVAILABLE   AGE
+envoy   1/1     1            1           54s
 
 % kubectl logs -l app=envoy
 ...
